@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<title>IIC</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+body {font-family: "Lato", sans-serif}
+.mySlides {display: none}
+</style>
+<body>
+
+  <!-- The Band Section -->
+  <div class="w3-container w3-content w3-center w3-padding-64" style="max-width:900px" id="band">
+    <h2 class="w3-wide">Self-supervised Video Representation Learning
+Using Inter-intra Contrastive Framework</h2>
+
+    <div class="w3-row w3-padding-4">
+      <div class="w3-third">
+        <p><font size=4>Li TAO </font></p>
+      </div>
+      <div class="w3-third">
+        <p><font size=4>Xueting Wang</font></p>
+      </div>
+      <div class="w3-third">
+        <p><font size=4>Toshihiko Yamasaki </font></p>
+      </div>
+    </div>
+
+    <div class="w3-row w3-padding-4">
+      <div class="w3-half">
+        <p><font size=4>Paper <a href="http://arxiv.org/abs/2008.02531" target="view_window">[arXiv]</a></font></p>
+      </div>
+      <div class="w3-half">
+        <p><font size=4>Code <a href="https://github.com/BestJuly/Inter-intra-video-contrastive-learning" target="view_window">[github]</a></font></p>
+      </div>
+    </div>
+
+    <div class="w3-row w3-padding-32">
+        <img src="./fig/general.png" class="w3-round w3-margin-bottom" alt="Random Name" style="width:60%">
+         <p class="w3-justify">Figure 1. General idea of proposed method. Given video 𝑥𝑖 ,
+        different views of this video are treated as positives, and
+        those features are constrained to be close to each other. Data
+        from other videos are treated as negatives. Temporal relations
+        in the anchor view will be broken down to generate
+        intra-negative samples, which are also treated as negatives
+        to help the model learn temporal information.</p>
+    </div>
+
+    <h2 class="w3-wide">Abstract</h2>
+    <p class="w3-justify">We propose a self-supervised method to learn feature representations
+    from videos.Astandard approach in traditional self-supervised
+    methods uses positive-negative data pairs to train with contrastive
+    learning strategy. In such a case, different modalities of the same
+    video are treated as positives and video clips from a different video
+    are treated as negatives. Because the spatio-temporal information is
+    important for video representation, we extend the negative samples
+    by introducing intra-negative samples, which are transformed from
+    the same anchor video by breaking temporal relations in video
+    clips. With the proposed inter-intra contrastive framework, we
+    can train spatio-temporal convolutional networks to learn video
+    representations. There are many flexible options in our proposed
+    framework and we conduct experiments by using several different
+    configurations. Evaluations are conducted on video retrieval and
+    video recognition tasks using the learned video representation. Our
+    proposed methods outperform current state-of-the-art results by a
+    large margin, such as 16.7% and 9.5% points improvements in top-
+    1 accuracy on UCF101 and HMDB51 datasets for video retrieval,
+    respectively. For video recognition, improvements can also be obtained
+    on these two benchmark datasets.</p>
+
+    <div class="w3-row w3-padding-32">
+        <img src="./fig/generate_intra.png" class="w3-round w3-margin-bottom" alt="Random Name" style="width:40%">
+         <p class="w3-center">Figure 2. Two ways to generate intra-negative samples.</p>
+    </div>
+    <div class="w3-row w3-padding-32">
+        <img src="./fig/framework.png" class="w3-round w3-margin-bottom" alt="Random Name" style="width:90%">
+         <p class="w3-center">Figure 3. Inter-intra contrastive learning framework.</p>
+    </div>
+
+
+
+  </div>
+
+
+<!-- End Page Content -->
+</div>
+
+
+</body>
+</html>
