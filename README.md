@@ -1,5 +1,10 @@
 Official code for [Self-supervised Video Representation Learning Using Inter-intra Contrastive Framework](arxiv.org/abs/2008.02531) [ACMMM'20]
 
+[Project page](https://bestjuly.github.io/Inter-intra-video-contrastive-learning/)
+
+## Codes in refactoring and testing, Coming soon.
+
+
 ## Requirements
 > This is my experimental enviroment.   
 PyTorch 1.3.0
@@ -11,6 +16,7 @@ For samples, we have
 - [x] Inter-negatives: different samples, or samples with different indexes;
 - [x] Intra-positives: data from the same sample, in different views / from different augmentations; 
 - [x] Intra-negatives: data from the same sample while some kind of information has been broken down. In video case, temporal information has been destoried.
+
 Our work make use of all usable parts to form an inter-intra contrastive framework. The experiments here are mainly based on Contrastive Multiview Coding. It is flexible to extend this framework to other contrastive learning methods such as MoCo and SimCLR.
 
 ## Highlights
