@@ -17,7 +17,7 @@ For samples, we have
 - [x] Intra-positives: data from the same sample, in different views / from different augmentations; 
 - [x] Intra-negatives: data from the same sample while some kind of information has been broken down. In video case, temporal information has been destoried.
 
-Our work make use of all usable parts to form an inter-intra contrastive framework. The experiments here are mainly based on Contrastive Multiview Coding. It is flexible to extend this framework to other contrastive learning methods such as MoCo and SimCLR.
+Our work makes use of all usable parts (in this classification category) to form an inter-intra contrastive framework. The experiments here are mainly based on Contrastive Multiview Coding. It is flexible to extend this framework to other contrastive learning methods such as MoCo and SimCLR.
 
 ## Highlights
 ### Make the most of data for contrastive learning.
@@ -42,6 +42,58 @@ python train_ssl.py --dataset=ucf101
 The default setting uses frame repeating as intra-negative samples for videos. R3D is used by default. You can use `--model` to try different models. 
 
 We use two views in our experiments. View #1 is a RGB video clip, View #2 can be RGB/Res/Optical flow video vlip. Residual video clips are default modality for View # 2. You can use `--modality` to try other modalities. Intra-negative samples are generated from View #1. 
+
+In this part, it may be wired to use only one optical flow channel *u* or *v*. We use only one channel to make it possible for **only one model** to handle inputs from different modalities. It is also an optional setting that using different models to handle each modality.
+
+## Results
+### Retrieval results
+The table lists retrieval results on UCF101 *split* 1. We reimplemented CMC and report its results. Other results are from corresponding paper.
+
+Method | top1 | top5 | top10 | top20 | top50
+---|---|---|---|---|---
+Jigsaw  | 19.7 | 28.5 | 33.5 | 40.0 | 49.4
+OPN  | 19.9 | 28.7 | 34.0 | 40.6 | 51.6
+R3D (random)  | 9.9 | 18.9 | 26.0 | 35.5 | 51.9
+VCOP  | 14.1  |  30.3 | 40.4 | 51.1 | 66.5
+VCP | 18.6 | 33.6 | 42.5 | 53.5 | 68.1
+CMC  |  26.4  |  37.7  |  45.1  |  53.2  |  66.3 
+Ours (repeat + res)  |  36.5  |  54.1  |  62.9  |  72.4  |  83.4 
+Ours (repeat + u)  |  41.8  |  60.4  |  **69.5**  |  **78.4**  |  **87.7** 
+Ours (shuffle + res)  |  34.6  |  53.0  |  62.3  |  71.7  |  82.4 
+Ours (shuffle + v)  |  **42.4**  |  **60.9**  |  69.2  |  77.1  |  86.5 
+RTT | 26.1 | 48.5	| 59.1 | 69.6 | 82.8
+MemDPC | 20.2 |	40.4 | 52.4 | 64.7 | -
+
+
+### Recognition results
+We only use R3D as our network backbone. Usually, using Resnet-18-3D, R(2+1)D or deeper networks can yield better performance.
+
+Method | UCF101 | HMDB51
+---|---|---
+Jigsaw |  51.5  |  22.5 
+O3N (res)  |  60.3  |  32.5 
+OPN  |  56.3  |  22.1
+OPN (res)  |  71.8  |  36.7
+CrossLearn  |  58.7  |  27.2 
+CMC (3 views)  |  59.1  |  26.7
+R3D (random)  | 54.5 | 23.4
+ImageNet-inflated  |  60.3  |  30.7
+3D ST-puzzle  |  65.8  |  33.7
+VCOP  | 64.9 |  29.5 
+VCP  |  66.0 |  31.5 
+Ours (repeat + res) |  72.8  |  35.3 
+Ours (repeat + u)  |  72.7  |  36.8 
+Ours (shuffle + res) |  **74.4**  |  **38.3**
+Ours (shuffle + v)  |  67.0  |  34.0 
+
+**Residual clips + 3D CNN** The residual clips with 3D CNNs are effective. More information about this part can be found in [Rethinking Motion Representation: Residual Frames with 3D ConvNets for Better Action Recognition](https://arxiv.org/abs/2001.05661) (previous but more detailed version) and [Motion Representation Using Residual Frames with 3D CNN](https://arxiv.org/abs/2006.13017) (short version with better results).
+
+The key code for this part is 
+```
+shift_x = torch.roll(x,1,2)
+x = ((shift_x -x) + 1)/2
+```
+Which is slightly different from that in papers.
 
 ### Retrieve video clips
 ```
