@@ -1,23 +1,29 @@
-Official code for [Self-supervised Video Representation Learning Using Inter-intra Contrastive Framework](https://arxiv.org/abs/2008.02531) [ACMMM'20]
+Official code for paper, Self-supervised Video Representation Learning Using Inter-intra Contrastive Framework [ACMMM'20].
 
-[Project page](https://bestjuly.github.io/Inter-intra-video-contrastive-learning/)
+[Arxiv paper](https://arxiv.org/abs/2008.02531) [Project page](https://bestjuly.github.io/Inter-intra-video-contrastive-learning/)
 
-## Codes in refactoring and testing, Coming soon.
+## Codes in refactoring and testing, finetuning part coming soon.
 
 
 ## Requirements
-> This is my experimental enviroment.   
-PyTorch 1.3.0
-python  3.7.4
+> This is my experimental enviroment. 
+
+- PyTorch 1.3.0
+- python  3.7.4
+- accimage 
 
 ## Inter-intra contrastive framework
 For samples, we have
-- [ ] Inter-positives: samples with same labels, not used for self-supervised learning;
-- [x] Inter-negatives: different samples, or samples with different indexes;
-- [x] Intra-positives: data from the same sample, in different views / from different augmentations; 
-- [x] Intra-negatives: data from the same sample while some kind of information has been broken down. In video case, temporal information has been destoried.
+- [ ] Inter-positives: samples with **same labels**, not used for self-supervised learning;
+- [x] Inter-negatives: **different samples**, or samples with different indexes;
+- [x] Intra-positives: data from the **same sample**, in different views / from different augmentations; 
+- [x] Intra-negatives: data from the **same sample** while some kind of information has been broken down. In video case, temporal information has been destoried.
 
-Our work makes use of all usable parts (in this classification category) to form an inter-intra contrastive framework. The experiments here are mainly based on Contrastive Multiview Coding. It is flexible to extend this framework to other contrastive learning methods such as MoCo and SimCLR.
+Our work makes use of all usable parts (in this classification category) to form an inter-intra contrastive framework. The experiments here are mainly based on Contrastive Multiview Coding. 
+
+It is flexible to extend this framework to other contrastive learning methods which use negative samples, such as MoCo and SimCLR.
+
+![image](https://github.com/BestJuly/Inter-intra-video-contrastive-learning/blob/master/fig/general.png)
 
 ## Highlights
 ### Make the most of data for contrastive learning.
@@ -39,22 +45,40 @@ I highly recommend the pre-comupeted optical flow images and resized RGB frames 
 ```
 python train_ssl.py --dataset=ucf101
 ```
-The default setting uses frame repeating as intra-negative samples for videos. R3D is used by default. You can use `--model` to try different models. 
 
-We use two views in our experiments. View #1 is a RGB video clip, View #2 can be RGB/Res/Optical flow video vlip. Residual video clips are default modality for View # 2. You can use `--modality` to try other modalities. Intra-negative samples are generated from View #1. 
+This equals to
 
-In this part, it may be wired to use only one optical flow channel *u* or *v*. We use only one channel to make it possible for **only one model** to handle inputs from different modalities. It is also an optional setting that using different models to handle each modality.
+```
+python train_ssl.py --dataset=ucf101 --model=r3d --modality=res --neg=repeat
+```
+
+This default setting uses frame repeating as intra-negative samples for videos. R3D is used.
+
+We use two views in our experiments. View #1 is a RGB video clip, View #2 can be RGB/Res/Optical flow video clip. Residual video clips are default modality for View #2. You can use `--modality` to try other modalities. Intra-negative samples are generated from View #1. 
+
+It may be wired to use only one optical flow channel *u* or *v*. We use only one channel to make it possible for **only one model** to handle inputs from different modalities. It is also an optional setting that using different models to handle each modality.
 
 ### Retrieve video clips
 ```
 python retrieve_clips.py --ckpt=/path/to/your/model --dataset=ucf101 --merge=True
 ```
-Only one model is used for different views. You can set `--modality` to decide which modality to use. When setting `--merge=True`, RGB for View #1 and the specific modality for View #2 will be jointly tested.
+One model is used to handle different views/modalities. You can set `--modality` to decide which modality to use. When setting `--merge=True`, RGB for View #1 and the specific modality for View #2 will be jointly used for joint retrieval.
+
+By default training setting, it is very easy to get over 30%@top1 for video retrieval in ucf101 and around 13%@top1 in hmdb51 without joint retrieval.
 
 ### Fine-tune model for video recognition
 ```
 python ft_classify.py --ckpt=/path/to/your/model --dataset=ucf101
 ```
+Testing will be automatically conducted at the end of training.
+
+Or you can use
+```
+python ft_classify.py --ckpt=/path/to/your/model --dataset=ucf101 --mode=test
+```
+In this way, only testing is conducted using the given model.
+
+The accuracies using residual clips are not stable for validation set (this may also caused by), the final testing part will use the best model on validation set.
 
 ## Results
 ### Retrieval results
@@ -106,6 +130,9 @@ x = ((shift_x -x) + 1)/2
 ```
 Which is slightly different from that in papers.
 
+We also reimplement VCP in this [repo](https://github.com/BestJuly/VCP). By simply using residual cliops, significant improvements can be obtained for both video retrieval and video recognition.
+
+
 ## Citation
 If you find our work helpful for your research, please consider citing the paper
 ```
@@ -135,4 +162,4 @@ If you find the residual input helpful for video-related tasks, please consider 
 ```
 
 ## Acknowledgements
-Part of this code is inspired by [CMC](https://github.com/HobbitLong/CMC) and [VCOP](https://github.com/xudejing/video-clip-order-prediction)
+Part of this code is inspired by [CMC](https://github.com/HobbitLong/CMC) and [VCOP](https://github.com/xudejing/video-clip-order-prediction).
