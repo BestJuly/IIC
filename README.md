@@ -1,4 +1,4 @@
-Official code for [Self-supervised Video Representation Learning Using Inter-intra Contrastive Framework](arxiv.org/abs/2008.02531) [ACMMM'20]
+Official code for [Self-supervised Video Representation Learning Using Inter-intra Contrastive Framework](https://arxiv.org/abs/2008.02531) [ACMMM'20]
 
 [Project page](https://bestjuly.github.io/Inter-intra-video-contrastive-learning/)
 
@@ -44,6 +44,17 @@ The default setting uses frame repeating as intra-negative samples for videos. R
 We use two views in our experiments. View #1 is a RGB video clip, View #2 can be RGB/Res/Optical flow video vlip. Residual video clips are default modality for View # 2. You can use `--modality` to try other modalities. Intra-negative samples are generated from View #1. 
 
 In this part, it may be wired to use only one optical flow channel *u* or *v*. We use only one channel to make it possible for **only one model** to handle inputs from different modalities. It is also an optional setting that using different models to handle each modality.
+
+### Retrieve video clips
+```
+python retrieve_clips.py --ckpt=/path/to/your/model --dataset=ucf101 --merge=True
+```
+Only one model is used for different views. You can set `--modality` to decide which modality to use. When setting `--merge=True`, RGB for View #1 and the specific modality for View #2 will be jointly tested.
+
+### Fine-tune model for video recognition
+```
+python ft_classify.py --ckpt=/path/to/your/model --dataset=ucf101
+```
 
 ## Results
 ### Retrieval results
@@ -94,17 +105,6 @@ shift_x = torch.roll(x,1,2)
 x = ((shift_x -x) + 1)/2
 ```
 Which is slightly different from that in papers.
-
-### Retrieve video clips
-```
-python retrieve_clips.py --ckpt=/path/to/your/model --dataset=ucf101 --merge=True
-```
-Only one model is used for different views. You can set `--modality` to decide which modality to use. When setting `--merge=True`, RGB for View #1 and the specific modality for View #2 will be jointly tested.
-
-### Fine-tune model for video recognition
-```
-python ft_classify.py --ckpt=/path/to/your/model --dataset=ucf101
-```
 
 ## Citation
 If you find our work helpful for your research, please consider citing the paper
