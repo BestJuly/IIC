@@ -1,5 +1,4 @@
-<<<<<<< HEAD
-Official code for [Self-supervised Video Representation Learning Using Inter-intra Contrastive Framework](arxiv.org) [ACMMM'20]
+Official code for [Self-supervised Video Representation Learning Using Inter-intra Contrastive Framework](arxiv.org/abs/2008.02531) [ACMMM'20]
 
 ## Requirements
 > This is my experimental enviroment.   
@@ -77,9 +76,5 @@ If you find the residual input helpful for video-related tasks, please consider 
 }
 ```
 
-## Acknowleedgements
-Part of this code is inspired by [CMC]https://github.com/HobbitLong/CMC and [VCOP](https://github.com/xudejing/video-clip-order-prediction)
-=======
-# Inter-intra-video-contrastive-learning
-Official implementation of ACMMM'20 paper 'Self-supervised Video Representation Learning Using Inter-intra Contrastive Framework'
->>>>>>> 1bb7d19dda760873a632dabe1100c2dc8f3dafdf
+## Acknowledgements
+Part of this code is inspired by [CMC](https://github.com/HobbitLong/CMC) and [VCOP](https://github.com/xudejing/video-clip-order-prediction)
