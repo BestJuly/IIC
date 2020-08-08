@@ -2,9 +2,6 @@ Official code for paper, Self-supervised Video Representation Learning Using Int
 
 [Arxiv paper](https://arxiv.org/abs/2008.02531) [Project page](https://bestjuly.github.io/Inter-intra-video-contrastive-learning/)
 
-## Codes in refactoring and testing, finetuning part coming soon.
-
-
 ## Requirements
 > This is my experimental enviroment. 
 
@@ -78,7 +75,9 @@ python ft_classify.py --ckpt=/path/to/your/model --dataset=ucf101 --mode=test
 ```
 In this way, only testing is conducted using the given model.
 
-The accuracies using residual clips are not stable for validation set (this may also caused by), the final testing part will use the best model on validation set.
+**Note**: The accuracies using residual clips are not stable for validation set (this may also caused by), the final testing part will use the best model on validation set.
+
+If everything is fine, you can achieve around 70% accuracy on UCF101. The results will vary from each other with different random seeds.
 
 ## Results
 ### Retrieval results
