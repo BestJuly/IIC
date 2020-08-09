@@ -30,7 +30,7 @@ Except for inter-negative samples, all possible data are used to help train the 
 The **inter-intra learning framework** can be extended to
 - Different contrastive learning methods: CMC, MoCo, SimCLR ...
 - Different intra-negative generation methods: frame repeating, frame shuffling ...
-- Different backbone: C3D, R3D, R(2+1)D, I3D ...
+- Different backbones: C3D, R3D, R(2+1)D, I3D ...
 
 
 ## Usage of this repo
@@ -75,7 +75,7 @@ python ft_classify.py --ckpt=/path/to/your/model --dataset=ucf101 --mode=test
 ```
 In this way, only testing is conducted using the given model.
 
-**Note**: The accuracies using residual clips are not stable for validation set (this may also caused by), the final testing part will use the best model on validation set.
+**Note**: The accuracies using residual clips are not stable for validation set (this may also caused by limited validation samples), the final testing part will use the best model on validation set.
 
 If everything is fine, you can achieve around 70% accuracy on UCF101. The results will vary from each other with different random seeds.
 
@@ -120,7 +120,7 @@ Ours (repeat + u)  |  72.7  |  36.8
 Ours (shuffle + res) |  **74.4**  |  **38.3**
 Ours (shuffle + v)  |  67.0  |  34.0 
 
-**Residual clips + 3D CNN** The residual clips with 3D CNNs are effective. More information about this part can be found in [Rethinking Motion Representation: Residual Frames with 3D ConvNets for Better Action Recognition](https://arxiv.org/abs/2001.05661) (previous but more detailed version) and [Motion Representation Using Residual Frames with 3D CNN](https://arxiv.org/abs/2006.13017) (short version with better results).
+**Residual clips + 3D CNN** The residual clips with 3D CNNs are effective, especially for scratch training. More information about this part can be found in [Rethinking Motion Representation: Residual Frames with 3D ConvNets for Better Action Recognition](https://arxiv.org/abs/2001.05661) (previous but more detailed version) and [Motion Representation Using Residual Frames with 3D CNN](https://arxiv.org/abs/2006.13017) (short version with better results).
 
 The key code for this part is 
 ```
@@ -129,17 +129,18 @@ x = ((shift_x -x) + 1)/2
 ```
 Which is slightly different from that in papers.
 
-We also reimplement VCP in this [repo](https://github.com/BestJuly/VCP). By simply using residual cliops, significant improvements can be obtained for both video retrieval and video recognition.
+We also reimplement VCP in this [repo](https://github.com/BestJuly/VCP). By simply using residual clips, significant improvements can be obtained for both video retrieval and video recognition.
 
 
 ## Citation
 If you find our work helpful for your research, please consider citing the paper
 ```
-@article{tao2020rethinking,
-  title={Rethinking Motion Representation: Residual Frames with 3D ConvNets for Better Action Recognition},
-  author={Tao, Li and Wang, Xueting and Yamasaki, Toshihiko},
-  journal={arXiv preprint arXiv:2001.05661},
-  year={2020}
+@article{tao2020selfsupervised,
+    title={Self-supervised Video Representation Learning Using Inter-intra Contrastive Framework},
+    author={Li Tao and Xueting Wang and Toshihiko Yamasaki},
+    journal={arXiv preprint arXiv:2008.02531},
+    year={2020},
+    eprint={2008.02531},
 }
 ```
 
