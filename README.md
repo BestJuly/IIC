@@ -1,3 +1,4 @@
+# Self-supervised Video Representation Learning Using Inter-intra Contrastive Framework
 Official code for paper, Self-supervised Video Representation Learning Using Inter-intra Contrastive Framework [ACMMM'20].
 
 [Arxiv paper](https://arxiv.org/abs/2008.02531) [Project page](https://bestjuly.github.io/Inter-intra-video-contrastive-learning/)
@@ -36,7 +37,13 @@ The **inter-intra learning framework** can be extended to
 ## Usage of this repo
 ### Data preparation
 You can download UCF101/HMDB51 dataset from official website: [UCF101](http://crcv.ucf.edu/data/UCF101.php) and [HMDB51](http://serre-lab.clps.brown.edu/resource/hmdb-a-large-human-motion-database/). Then decoded videos to frames.    
-I highly recommend the pre-comupeted optical flow images and resized RGB frames in this [repo](https://github.com/feichtenhofer/twostreamfusion).
+I highly recommend the pre-computed optical flow images and resized RGB frames in this [repo](https://github.com/feichtenhofer/twostreamfusion).
+
+If you use pre-computed frames, the folder architecture is like `path/to/dataset/video_id/frames.jpg`. If you decode frames on your own, the folder architecture may be like `path/to/dataset/class_name/video_id/frames.jpg`, in which way, you need pay more attention to the corresponding paths in dataset preparation.
+
+For pre-computed frames, find `rgb_folder`, `u_folder` and `v_folder` in `datasets/ucf101.py` for UCF101 datasets and change them to meet your environment. Please note that all those modalities are prepared even though in some settings, optical flow data are not used train the model. 
+
+If you do not prepare optical flow data, simply set `u_folder=rgb_folder` and `v_folder=rgb_folder` should help to avoid errors.
 
 ### Train self-supervised learning part
 ```
@@ -77,11 +84,11 @@ In this way, only testing is conducted using the given model.
 
 **Note**: The accuracies using residual clips are not stable for validation set (this may also caused by limited validation samples), the final testing part will use the best model on validation set.
 
-If everything is fine, you can achieve around 70% accuracy on UCF101. The results will vary from each other with different random seeds.
+If everything is fine, you can achieve around 70% accuracy on UCF101. The results will vary from each other with different random seeds. 
 
 ## Results
 ### Retrieval results
-The table lists retrieval results on UCF101 *split* 1. We reimplemented CMC and report its results. Other results are from corresponding paper.
+The table lists retrieval results on UCF101 *split* 1. We reimplemented CMC and report its results. Other results are from corresponding paper. VCOP, VCP, CMC, PRP, and ours are based on R3D network backbone.
 
 Method | top1 | top5 | top10 | top20 | top50
 ---|---|---|---|---|---
@@ -95,12 +102,16 @@ Ours (repeat + res)  |  36.5  |  54.1  |  62.9  |  72.4  |  83.4
 Ours (repeat + u)  |  41.8  |  60.4  |  **69.5**  |  **78.4**  |  **87.7** 
 Ours (shuffle + res)  |  34.6  |  53.0  |  62.3  |  71.7  |  82.4 
 Ours (shuffle + v)  |  **42.4**  |  **60.9**  |  69.2  |  77.1  |  86.5 
+PRP | 22.8 | 38.5 | 46.7 | 55.2 | 69.1
 RTT | 26.1 | 48.5	| 59.1 | 69.6 | 82.8
-MemDPC | 20.2 |	40.4 | 52.4 | 64.7 | -
+MemDPC-RGB | 20.2 |	40.4 | 52.4 | 64.7 | -
+MemDPC-Flow | 40.2 |	63.2 | 71.9 | 78.6 | -
 
 
 ### Recognition results
-We only use R3D as our network backbone. Usually, using Resnet-18-3D, R(2+1)D or deeper networks can yield better performance.
+We only use R3D as our network backbone. In this table, all reported results are pre-trained on UCF101. 
+
+Usually, 1. using Resnet-18-3D, R(2+1)D or deeper networks; 2.pre-training on larger datasets; 3. using larger input resolutions; 4. combining with audios or other features will also help. 
 
 Method | UCF101 | HMDB51
 ---|---|---
@@ -113,12 +124,15 @@ CMC (3 views)  |  59.1  |  26.7
 R3D (random)  | 54.5 | 23.4
 ImageNet-inflated  |  60.3  |  30.7
 3D ST-puzzle  |  65.8  |  33.7
-VCOP  | 64.9 |  29.5 
-VCP  |  66.0 |  31.5 
-Ours (repeat + res) |  72.8  |  35.3 
-Ours (repeat + u)  |  72.7  |  36.8 
-Ours (shuffle + res) |  **74.4**  |  **38.3**
-Ours (shuffle + v)  |  67.0  |  34.0 
+VCOP (R3D)  | 64.9 |  29.5
+VCOP (R(2+1)D) | 72.4 | 30.9 
+VCP (R3D)  |  66.0 |  31.5 
+Ours (repeat + res, R3D) |  72.8  |  35.3 
+Ours (repeat + u, R3D)  |  72.7  |  36.8 
+Ours (shuffle + res, R3D) |  **74.4**  |  **38.3**
+Ours (shuffle + v, R3D)  |  67.0  |  34.0 
+PRP (R3D) | 66.5 | 29.7
+PRP (R(2+1)D) | 72.1 | 35.0
 
 **Residual clips + 3D CNN** The residual clips with 3D CNNs are effective, especially for scratch training. More information about this part can be found in [Rethinking Motion Representation: Residual Frames with 3D ConvNets for Better Action Recognition](https://arxiv.org/abs/2001.05661) (previous but more detailed version) and [Motion Representation Using Residual Frames with 3D CNN](https://arxiv.org/abs/2006.13017) (short version with better results).
 
@@ -131,6 +145,18 @@ Which is slightly different from that in papers.
 
 We also reimplement VCP in this [repo](https://github.com/BestJuly/VCP). By simply using residual clips, significant improvements can be obtained for both video retrieval and video recognition.
 
+
+## Pretrained weights
+We provide pertrained weights from self-supervised training step: R3D[(google drive)](https://drive.google.com/file/d/17c5KJuPFEHt0vCjrMPO3UfS7BN8nNESX/view?usp=sharing). 
+
+> With this model, for video retrieval, you should achieve
+> - 33.4% @top1 with `--modality=res --merge=False`
+> - 34.8% @top1 with `--modality=rgb --merge=False`
+> - 36.5% @top1 with`--modality=res --merge=True`
+
+We may add more pretrained weights to support different network backbones in the future.
+
+For any questions, please contact Li TAO (taoli@hal.t.u-tokyo.ac.jp).
 
 ## Citation
 If you find our work helpful for your research, please consider citing the paper
@@ -161,5 +187,7 @@ If you find the residual input helpful for video-related tasks, please consider 
 }
 ```
 
+
 ## Acknowledgements
 Part of this code is inspired by [CMC](https://github.com/HobbitLong/CMC) and [VCOP](https://github.com/xudejing/video-clip-order-prediction).
+
