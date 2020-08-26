@@ -147,12 +147,18 @@ We also reimplement VCP in this [repo](https://github.com/BestJuly/VCP). By simp
 
 
 ## Pretrained weights
-We provide pertrained weights from self-supervised training step: R3D[(google drive)](https://drive.google.com/file/d/17c5KJuPFEHt0vCjrMPO3UfS7BN8nNESX/view?usp=sharing). 
+Pertrained weights from self-supervised training step: R3D[(google drive)](https://drive.google.com/file/d/17c5KJuPFEHt0vCjrMPO3UfS7BN8nNESX/view?usp=sharing). 
 
 > With this model, for video retrieval, you should achieve
 > - 33.4% @top1 with `--modality=res --merge=False`
 > - 34.8% @top1 with `--modality=rgb --merge=False`
 > - 36.5% @top1 with`--modality=res --merge=True`
+
+Finetuned weights for action recognition: R3D[(google drive)](https://drive.google.com/file/d/12uzHArg5hMGLuEUz36H4fJgGaeN4QyhZ/view?usp=sharing).
+
+> With this model, for video recognition, you should achieve
+> 72.7% @top1 with `python ft_classify.py --model=r3d --modality=res --mode=test -ckpt=./path/to/model`
+> # This result is better than that reported in paper. Results may be further improved with strong data augmentations.
 
 We may add more pretrained weights to support different network backbones in the future.
 
