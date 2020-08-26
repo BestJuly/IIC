@@ -38,7 +38,8 @@ def calculate_accuracy(outputs, targets):
 
 def diff(x):
     shift_x = torch.roll(x, 1, 2)
-    return ((x - shift_x) + 1) / 2
+    return x - shift_x # without rescaling
+    #return ((x - shift_x) + 1) / 2
 
 
 def load_pretrained_weights(ckpt_path):
@@ -235,7 +236,8 @@ if __name__ == '__main__':
     if args.mode == 'train':
         model.load_state_dict(pretrained_weights['model'], strict=False)
     else:
-        model.load_state_dict(pretrained_weights['model'], strict=True)
+        #model.load_state_dict(pretrained_weights['model'], strict=True)
+        model.load_state_dict(pretrained_weights, strict=True)
 
 
     if args.desp:
@@ -244,7 +246,7 @@ if __name__ == '__main__':
         exp_name = '{}_{}_cls_{}'.format(args.model, args.modality, time.strftime('%m%d'))
     print(exp_name)
     model_dir = os.path.join(args.model_dir, exp_name)
-    if not os.path.isdir(model_dir):
+    if not os.path.isdir(model_dir) and args.mode == 'train':
         os.makedirs(model_dir)
 
     train_transforms = transforms.Compose([
@@ -252,14 +254,19 @@ if __name__ == '__main__':
         transforms.RandomCrop(112),
         transforms.ToTensor()
     ])
+    test_transforms = transforms.Compose([
+        transforms.Resize((128, 171)),
+        transforms.CenterCrop(112),
+        transforms.ToTensor()
+    ])
 
     if args.dataset == 'ucf101':
         train_dataset = UCF101Dataset('data/ucf101', args.cl, args.split, True, train_transforms)
-        test_dataset = UCF101Dataset('data/ucf101', args.cl, args.split, False, train_transforms)
+        test_dataset = UCF101Dataset('data/ucf101', args.cl, args.split, False, test_transforms)
         val_size = 800
     elif args.dataset == 'hmdb51':
         train_dataset = HMDB51Dataset('data/hmdb51', args.cl, args.split, True, train_transforms)
-        test_dataset = HMDB51Dataset('data/hmdb51', args.cl, args.split, False, train_transforms)
+        test_dataset = HMDB51Dataset('data/hmdb51', args.cl, args.split, False, test_transforms)
         val_size = 400
 
     # split val for 800 videos
