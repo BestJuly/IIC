@@ -158,7 +158,7 @@ Finetuned weights for action recognition: R3D[(google drive)](https://drive.goog
 
 > With this model, for video recognition, you should achieve
 > 72.7% @top1 with `python ft_classify.py --model=r3d --modality=res --mode=test -ckpt=./path/to/model`
-> # This result is better than that reported in paper. Results may be further improved with strong data augmentations.
+> This result is better than that reported in paper. Results may be further improved with strong data augmentations.
 
 We may add more pretrained weights to support different network backbones in the future.
 
