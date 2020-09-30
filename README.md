@@ -1,5 +1,5 @@
 # Self-supervised Video Representation Learning Using Inter-intra Contrastive Framework
-Official code for paper, Self-supervised Video Representation Learning Using Inter-intra Contrastive Framework [ACMMM'20].
+Official code for paper, Self-supervised Video Representation Learning Using Inter-intra Contrastive Framework [ACMMM'20]. 
 
 [Arxiv paper](https://arxiv.org/abs/2008.02531) [Project page](https://bestjuly.github.io/Inter-intra-video-contrastive-learning/)
 
@@ -10,7 +10,7 @@ Official code for paper, Self-supervised Video Representation Learning Using Int
 - python  3.7.4
 - accimage 
 
-## Inter-intra contrastive framework
+## Inter-intra contrastive (IIC) framework
 For samples, we have
 - [ ] Inter-positives: samples with **same labels**, not used for self-supervised learning;
 - [x] Inter-negatives: **different samples**, or samples with different indexes;
@@ -33,8 +33,13 @@ The **inter-intra learning framework** can be extended to
 - Different intra-negative generation methods: frame repeating, frame shuffling ...
 - Different backbones: C3D, R3D, R(2+1)D, I3D ...
 
+## Updates
+Oct. 1, 2020 - Results using C3D and R(2+1)D are added; fix random seed more tightly.
+Aug. 26, 2020 - Add pretrained weights for R3D.
 
 ## Usage of this repo
+> Notification: we have added codes to fix random seed more tightly for better reproducibility. However, results in our paper used previous random seed settings. Therefore, there should be tiny differences for the performance from that reported in our paper. To reproduce retrieval results same as our paper, please use the provided model weights.
+
 ### Data preparation
 You can download UCF101/HMDB51 dataset from official website: [UCF101](http://crcv.ucf.edu/data/UCF101.php) and [HMDB51](http://serre-lab.clps.brown.edu/resource/hmdb-a-large-human-motion-database/). Then decoded videos to frames.    
 I highly recommend the pre-computed optical flow images and resized RGB frames in this [repo](https://github.com/feichtenhofer/twostreamfusion).
@@ -141,7 +146,7 @@ The key code for this part is
 shift_x = torch.roll(x,1,2)
 x = ((shift_x -x) + 1)/2
 ```
-Which is slightly different from that in papers.
+which is slightly different from that in papers.
 
 We also reimplement VCP in this [repo](https://github.com/BestJuly/VCP). By simply using residual clips, significant improvements can be obtained for both video retrieval and video recognition.
 
@@ -157,12 +162,45 @@ Pertrained weights from self-supervised training step: R3D[(google drive)](https
 Finetuned weights for action recognition: R3D[(google drive)](https://drive.google.com/file/d/12uzHArg5hMGLuEUz36H4fJgGaeN4QyhZ/view?usp=sharing).
 
 > With this model, for video recognition, you should achieve
-> 72.7% @top1 with `python ft_classify.py --model=r3d --modality=res --mode=test -ckpt=./path/to/model`
+> 72.7% @top1 with `python ft_classify.py --model=r3d --modality=res --mode=test -ckpt=./path/to/model --dataset=ucf101 --split=1`.
 > This result is better than that reported in paper. Results may be further improved with strong data augmentations.
 
-We may add more pretrained weights to support different network backbones in the future.
-
 For any questions, please contact Li TAO (taoli@hal.t.u-tokyo.ac.jp).
+
+### Results for other network architectures
+
+Results are averaged on 3 splits without using optical flow. R3D and R21D are the same as VCOP / VCP / PRP.   
+
+UCF101 | top1 | top5 | top10 | top20 | top50 | Recong 
+---    |---   |---   |---    |---    |---    |---
+C3D (VCOP) | 12.5 |	29.0 | 39.0 | 50.6 |	66.9 | 65.6 
+C3D (VCP) | 17.3 | 31.5 | 42.0 |	52.6 | 	67.7 | 68.5 
+C3D (PRP) | 23.2 | 38.1 | 46.0 | 55.7 | 68.4 | 69.1
+C3D (ours, repeat) | **31.9** | **48.2** |	**57.3**|	**67.1** |	**79.1** | **70.0** 
+C3D (ours, shuffle) | 28.9	| 45.4	| 55.5	| 66.2	| 78.8 | 69.7 
+R21D (VCOP) | 10.7 |	25.9 | 35.4	| 47.3 | 63.9 | 72.4 
+R21D (VCP) | 19.9 | 33.7 | 42.0	| 50.5 | 64.4 | 66.3 
+R21D (PRP) | 20.3 | 34.0 | 41.9 | 51.7 | 64.2 | 72.1
+R21D (ours, repeat) | **34.7** | **51.7** | **60.9** | **69.4** | **81.9** | 72.4
+R21D (ours, shuffle) | 30.2	| 45.6	| 55.0	| 64.4 |	77.6 | **73.3**
+Res18-3D (ours, repeat) | 36.8	| 54.1 |	63.1 |	72.0 |	83.3 | -
+Res18-3D (ours, shuffle) | 33.0 |	49.2 |	59.1 |	69.1 |	80.6 | -
+
+
+HMDB51 |  top1 | top5 | top10 | top20 | top50 | Recong
+---    |---   |---   |---    |---    |---    |---
+C3D (VCOP) | 7.4	| 22.6	| 34.4	| 48.5	| 70.1 | 28.4
+C3D (VCP) | 7.8	| 23.8	| 35.3	| 49.3	| 71.6 | 32.5
+C3D (PRP) | 10.5 | 27.2 | 40.4 | 56.2 | 75.9 | **34.5**
+C3D (ours, repeat) | 9.9 |	29.6 |	42.0 | 	57.3 |	78.4 | 30.8
+C3D (ours, shuffle) | **11.5**	| **31.3**	| **43.9**	| **60.1**	| **80.3** | 29.7
+R21D (VCOP) | 5.7	| 19.5	| 30.7	| 45.6	| 67.0 | 30.9
+R21D (VCP) | 6.7	| 21.3	| 32.7	| 49.2	| 73.3 | 32.2
+R21D (PRP) | 8.2 | 25.3 | 36.2 | 51.0 | 73.0 | **35.0**
+R21D (ours, repeat)| **12.7**	| **33.3**	| **45.8**	| **61.6**	| **81.3** | 34.0
+R21D (ours, shuffle)| 12.6	| 31.9 |	44.2 | 	59.9 |	80.7 | 31.2
+Res18-3D (ours, repeat) | 15.5 |	34.4 |	48.9 |	63.8 |	83.8 | -
+Res18-3D (ours, shuffle) | 12.4 |	33.6 |	46.9 |	63.2 |	83.5 | -
 
 ## Citation
 If you find our work helpful for your research, please consider citing the paper

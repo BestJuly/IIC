@@ -199,7 +199,7 @@ def parse_args():
     parser.add_argument('--start-epoch', type=int, default=1, help='manual epoch number (useful on restarts)')
     parser.add_argument('--bs', type=int, default=16, help='mini-batch size')
     parser.add_argument('--workers', type=int, default=4, help='number of data loading workers')
-    parser.add_argument('--seed', type=int, help='seed for initializing training.')
+    parser.add_argument('--seed', type=int, default=632, help='seed for initializing training.')
     parser.add_argument('--modality', default='res', type=str, help='modality from [rgb, res, u, v]') 
     args = parser.parse_args()
     return args
@@ -209,15 +209,17 @@ if __name__ == '__main__':
     args = parse_args()
     print(vars(args))
 
-    torch.backends.cudnn.benchmark = True
-
-    if args.seed:
-        print('Set random seed to', args.seed)
-        random.seed(args.seed)
-        np.random.seed(args.seed)
-        torch.manual_seed(args.seed)
-        if args.gpu:
-            torch.cuda.manual_seed_all(args.seed)
+    # Uncomment to fix all parameters for reproducibility
+    seed = args.seed
+    torch.backends.cudnn.deterministic = True
+    torch.backends.cudnn.benchmark = False
+    random.seed(seed)
+    np.random.seed(seed)
+    os.environ['PYTHONHASHSEED'] = str(seed)
+    torch.manual_seed(seed)
+    torch.cuda.manual_seed(seed)
+    torch.cuda.manual_seed_all(seed)
+    #'''
 
     ########### model ##############
     if args.dataset == 'ucf101':
