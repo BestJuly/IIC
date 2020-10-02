@@ -1,7 +1,7 @@
 # Self-supervised Video Representation Learning Using Inter-intra Contrastive Framework
 Official code for paper, Self-supervised Video Representation Learning Using Inter-intra Contrastive Framework [ACMMM'20]. 
 
-[Arxiv paper](https://arxiv.org/abs/2008.02531) [Project page](https://bestjuly.github.io/Inter-intra-video-contrastive-learning/)
+[Arxiv paper](https://arxiv.org/abs/2008.02531) [Project page](https://bestjuly.github.io/IIC/)
 
 ## Requirements
 > This is my experimental enviroment. 
@@ -183,8 +183,8 @@ R21D (VCP) | 19.9 | 33.7 | 42.0	| 50.5 | 64.4 | 66.3
 R21D (PRP) | 20.3 | 34.0 | 41.9 | 51.7 | 64.2 | 72.1
 R21D (ours, repeat) | **34.7** | **51.7** | **60.9** | **69.4** | **81.9** | 72.4
 R21D (ours, shuffle) | 30.2	| 45.6	| 55.0	| 64.4 |	77.6 | **73.3**
-Res18-3D (ours, repeat) | 36.8	| 54.1 |	63.1 |	72.0 |	83.3 | -
-Res18-3D (ours, shuffle) | 33.0 |	49.2 |	59.1 |	69.1 |	80.6 | -
+Res18-3D (ours, repeat) | 36.8	| 54.1 |	63.1 |	72.0 |	83.3 | 72.4
+Res18-3D (ours, shuffle) | 33.0 |	49.2 |	59.1 |	69.1 |	80.6 | 73.1
 
 
 HMDB51 |  top1 | top5 | top10 | top20 | top50 | Recong
@@ -199,8 +199,8 @@ R21D (VCP) | 6.7	| 21.3	| 32.7	| 49.2	| 73.3 | 32.2
 R21D (PRP) | 8.2 | 25.3 | 36.2 | 51.0 | 73.0 | **35.0**
 R21D (ours, repeat)| **12.7**	| **33.3**	| **45.8**	| **61.6**	| **81.3** | 34.0
 R21D (ours, shuffle)| 12.6	| 31.9 |	44.2 | 	59.9 |	80.7 | 31.2
-Res18-3D (ours, repeat) | 15.5 |	34.4 |	48.9 |	63.8 |	83.8 | -
-Res18-3D (ours, shuffle) | 12.4 |	33.6 |	46.9 |	63.2 |	83.5 | -
+Res18-3D (ours, repeat) | 15.5 |	34.4 |	48.9 |	63.8 |	83.8 | 34.3
+Res18-3D (ours, shuffle) | 12.4 |	33.6 |	46.9 |	63.2 |	83.5 | 34.3
 
 ## Citation
 If you find our work helpful for your research, please consider citing the paper
