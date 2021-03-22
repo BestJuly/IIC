@@ -7,6 +7,7 @@ Official code for paper, Self-supervised Video Representation Learning Using Int
 > This is my experimental enviroment. 
 
 - PyTorch 1.3.0
+> It seems that PyTorch 1.7.0 is not compatible with current codes, causing poor performance. [#9](https://github.com/BestJuly/IIC/issues/9)
 - python  3.7.4
 - accimage 
 
